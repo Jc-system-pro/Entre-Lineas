@@ -19,7 +19,8 @@ function registrarTrivia(obj) {
 // Se registran al cargar (los scripts de trivias deben cargarse antes que app.js)
 window.addEventListener("DOMContentLoaded", () => {
     if (window.TRIVIA_PRINCIPITO1) registrarTrivia(window.TRIVIA_PRINCIPITO1);
-    // Agrega futuras trivias aquí:
+    if (window.TRIVIA_LAFLORMB) registrarTrivia(window.TRIVIA_LAFLORMB);
+    // Agregar futuras trivias aquí:
     // if (window.TRIVIA_HOBBIT1) registrarTrivia(window.TRIVIA_HOBBIT1);
 });
 
