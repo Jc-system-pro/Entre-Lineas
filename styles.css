@@ -11,12 +11,12 @@ html { scroll-behavior:smooth; }
 
 /* ---------- VARIABLES ---------- */
 :root {
-    --tierra-1:   #7A6055;
-    --tierra-2:   #5E4840;
-    --tierra-3:   #9E7E70;
-    --crema:      #FBF6EE;
-    --crema-2:    #F2E8D8;
-    --crema-3:    #EAD9C4;
+    --tierra-1:   #81aea8;
+    --tierra-2:   #6A9E99;
+    --tierra-3:   #92beb7;
+    --crema:      #F4EFE6;
+    --crema-2:    #EBE5DA;
+    --crema-3:    #E2DBD0;
     --error:      #C97A75;
     --ok:         #8FA876;
     --r:          0.5rem;
@@ -39,7 +39,7 @@ body {
 section { scroll-margin-top: 72px; }
 
 /* ---------- MODO NOCTURNO ---------- */
-body.modo-nocturno { background-color:#f0ece2; filter:sepia(0.10) contrast(0.97); }
+body.modo-nocturno { background-color:#fff5e4; filter:sepia(0.10) contrast(0.97); }
 
 /* ============================================================
    FONDO — siluetas de libros abiertos desvanecidas
@@ -50,7 +50,7 @@ body.modo-nocturno { background-color:#f0ece2; filter:sepia(0.10) contrast(0.97)
 }
 .bg-book {
     position: absolute;
-    opacity: 0.045;
+    opacity: 0.100;
     fill: var(--tierra-1);
 }
 .bg-book.b1 { width:340px; top:-60px; right:-80px; transform:rotate(18deg); }
@@ -63,8 +63,8 @@ body.modo-nocturno { background-color:#f0ece2; filter:sepia(0.10) contrast(0.97)
    NAVBAR
    ============================================================ */
 .navbar {
-    background: rgba(251,246,238,.95);
-    border-bottom: 1px solid rgba(139,106,85,.08);
+    background: rgba(244,239,230,.95);
+    border-bottom: 1px solid rgba(90,132,128,.08);
     position: fixed; top:0; left:0; width:100%; height:62px;
     z-index: 1000;
     backdrop-filter: blur(10px);
@@ -83,7 +83,7 @@ body.modo-nocturno { background-color:#f0ece2; filter:sepia(0.10) contrast(0.97)
 .nav-actions { display:flex; align-items:center; gap:1rem; }
 .btn-icon {
     background: transparent;
-    border: 1px solid rgba(139,106,85,.22);
+    border: 1px solid rgba(90,132,128,.22);
     color: var(--tierra-1);
     padding: .3rem .75rem; font-size: .72rem;
     border-radius: 20px; cursor: pointer; font-weight: 500;
@@ -93,7 +93,7 @@ body.modo-nocturno { background-color:#f0ece2; filter:sepia(0.10) contrast(0.97)
     letter-spacing: 0.03em;
 }
 .btn-icon svg { width:13px; height:13px; fill:currentColor; flex-shrink:0; }
-.btn-icon:hover { background:var(--crema-2); border-color:rgba(139,106,85,.4); }
+.btn-icon:hover { background:var(--crema-2); border-color:rgba(90,132,128,.4); }
 
 .nav-links { display:flex; gap:1.8rem; list-style:none; }
 .nav-links a {
@@ -115,7 +115,7 @@ body.modo-nocturno { background-color:#f0ece2; filter:sepia(0.10) contrast(0.97)
    HERO — editorial, sin caja, tipo portada de revista
    ============================================================ */
 .hero {
-    background: linear-gradient(160deg, #8A6E62 0%, #9E7E70 50%, #B09080 100%);
+    background: linear-gradient(160deg, #7AAEAA 0%, #9BBCB8 50%, #B0CECA 100%);
     padding: 5rem 2rem 4.5rem;
     position: relative; z-index: 2;
     overflow: hidden;
@@ -149,7 +149,7 @@ body.modo-nocturno { background-color:#f0ece2; filter:sepia(0.10) contrast(0.97)
     font-family: var(--font-serif);
     font-size: clamp(3rem, 7vw, 4.5rem);
     font-weight: 700; line-height: 1.05;
-    color: #FBF6EE;
+    color: #F4EFE6;
     margin-bottom: .8rem;
     letter-spacing: -0.01em;
 }
@@ -178,7 +178,7 @@ body.modo-nocturno { background-color:#f0ece2; filter:sepia(0.10) contrast(0.97)
    ============================================================ */
 .card {
     background: transparent;
-    border-bottom: 1px solid rgba(139,106,85,.08);
+    border-bottom: 1px solid rgba(90,132,128,.08);
     padding: 3.5rem 0;
     animation: fadeUp .5s ease both;
 }
@@ -188,7 +188,7 @@ body.modo-nocturno { background-color:#f0ece2; filter:sepia(0.10) contrast(0.97)
     background: transparent;
     padding: 3.5rem 0;
     border-radius: 0;
-    border-bottom: 1px solid rgba(139,106,85,.08);
+    border-bottom: 1px solid rgba(90,132,128,.08);
     margin-top: 0;
 }
 .card.info-card.clear { background: transparent; }
@@ -223,7 +223,7 @@ h2 {
 input {
     background: rgba(242,232,216,.5);
     border: none;
-    border-bottom: 1.5px solid rgba(139,106,85,.2);
+    border-bottom: 1.5px solid rgba(90,132,128,.2);
     padding: .85rem .2rem;
     color: var(--tierra-2); font-size:.9rem;
     font-family: var(--font-sans);
@@ -232,7 +232,7 @@ input {
     outline: none;
 }
 input:focus { border-bottom-color: var(--tierra-1); background: transparent; }
-input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
+input::placeholder { color: rgba(76,120,116,.35); font-size:.85rem; }
 .btn-primary {
     background: var(--tierra-2); color: var(--crema);
     border: none; padding: .8rem 2rem;
@@ -247,7 +247,7 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
 .btn-primary:hover  { background: var(--tierra-1); letter-spacing: .07em; }
 .btn-primary:active { transform: scale(.97); }
 .btn-ghost {
-    background: transparent; border: none; border-bottom: 1px solid rgba(139,106,85,.3);
+    background: transparent; border: none; border-bottom: 1px solid rgba(90,132,128,.3);
     color: var(--tierra-1); padding: .4rem 0;
     font-size: .8rem; cursor: pointer;
     transition: border-color .2s, color .2s;
@@ -264,13 +264,13 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
-    border-top: 1px solid rgba(139,106,85,.1);
+    border-top: 1px solid rgba(90,132,128,.1);
     margin-top: 1rem;
 }
 .info-item {
     background: transparent;
     padding: 2rem 0 2rem 1.5rem;
-    border-bottom: 1px solid rgba(139,106,85,.08);
+    border-bottom: 1px solid rgba(90,132,128,.08);
     border-left: none;
     display: grid;
     grid-template-columns: auto 1fr;
@@ -282,7 +282,7 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
     content: attr(data-num);
     font-family: var(--font-serif);
     font-size: 3.5rem; font-weight: 600;
-    color: rgba(139,106,85,.08);
+    color: rgba(90,132,128,.08);
     line-height: 1;
     position: absolute; left: 0; top: 1.5rem;
     pointer-events: none;
@@ -330,7 +330,7 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
 }
 
 /* Progreso */
-.progress-bar-bg  { background:rgba(139,106,85,.1); height:2px; margin:.8rem 0 1.8rem; overflow:hidden; }
+.progress-bar-bg  { background:rgba(90,132,128,.1); height:2px; margin:.8rem 0 1.8rem; overflow:hidden; }
 .progress-bar-fill { background: var(--tierra-1); height:100%; width:0%; transition:width .35s ease; }
 
 /* Pregunta */
@@ -345,7 +345,7 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
 .option-btn {
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(139,106,85,.12);
+    border-bottom: 1px solid rgba(90,132,128,.12);
     color: var(--tierra-1);
     text-align:left; padding:.9rem .2rem;
     cursor:pointer; font-size:.88rem;
@@ -406,11 +406,11 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
 /* ============================================================
    RANKING
    ============================================================ */
-.leaderboard-list { list-style:none; border-top: 1px solid rgba(139,106,85,.1); }
+.leaderboard-list { list-style:none; border-top: 1px solid rgba(90,132,128,.1); }
 .leaderboard-list li {
     display:flex; align-items:center; gap:.8rem;
     padding:.95rem 0;
-    border-bottom: 1px solid rgba(139,106,85,.06);
+    border-bottom: 1px solid rgba(90,132,128,.06);
     font-size:.88rem;
     transition: padding-left .15s;
 }
@@ -428,7 +428,7 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
 .rank-pos.pos-3 svg { fill: #B07B5A; }
 .rank-pos.pos-num {
     font-family: var(--font-mono);
-    font-size: .72rem; color: rgba(94,72,64,.4);
+    font-size: .72rem; color: rgba(76,120,116,.4);
 }
 .rank-nombre { flex:1; }
 .rank-pts {
@@ -468,7 +468,7 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
     padding: .7rem 1rem; border-radius: 6px 6px 6px 0;
     font-size: .74rem; max-width: 190px; margin-bottom: 12px;
     line-height: 1.45; text-align: left;
-    box-shadow: 0 6px 20px rgba(94,72,64,.2);
+    box-shadow: 0 6px 20px rgba(76,120,116,.2);
     position: relative; pointer-events: none;
     animation: fadeInUp .3s ease;
     font-family: var(--font-sans);
@@ -486,7 +486,7 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
     position: relative; cursor: grab;
     width: 58px; height: 72px;
     transition: transform .2s;
-    filter: drop-shadow(0 6px 16px rgba(94,72,64,.2));
+    filter: drop-shadow(0 6px 16px rgba(76,120,116,.2));
 }
 .enlin-character:active { cursor:grabbing; }
 .enlin-character:hover { transform: translateY(-3px); }
@@ -515,8 +515,8 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
 .book-pages {
     position:absolute; top:2px; right:-4px;
     width:5px; height:calc(100% - 4px);
-    background: linear-gradient(90deg, #ede5d8, #f5ede0);
-    border:1px solid rgba(139,106,85,.15); border-left:none;
+    background: linear-gradient(90deg, #dceae9, #e8f2f1);
+    border:1px solid rgba(90,132,128,.15); border-left:none;
     border-radius:0 3px 3px 0; z-index:2;
 }
 /* Líneas de páginas */
@@ -527,7 +527,7 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
     background: repeating-linear-gradient(
         to bottom,
         transparent, transparent 2px,
-        rgba(139,106,85,.12) 2px, rgba(139,106,85,.12) 3px
+        rgba(90,132,128,.12) 2px, rgba(90,132,128,.12) 3px
     );
 }
 .book-cover-front {
@@ -603,7 +603,7 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
    ============================================================ */
 .footer {
     background: var(--crema-2);
-    border-top:1px solid rgba(139,106,85,.08);
+    border-top:1px solid rgba(90,132,128,.08);
     padding: 3rem 2rem;
     font-size:.82rem; margin-top:3rem;
     position:relative; z-index:10;
@@ -648,7 +648,7 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
         position:absolute; top:62px; left:0; width:100%;
         background:var(--crema); padding:1.5rem;
         gap:1.2rem; text-align:center;
-        border-bottom:1px solid rgba(139,106,85,.1);
+        border-bottom:1px solid rgba(90,132,128,.1);
         box-shadow:0 8px 18px rgba(0,0,0,.05);
     }
     .nav-links.active { display:flex !important; }
@@ -662,7 +662,7 @@ input::placeholder { color: rgba(94,72,64,.35); font-size:.85rem; }
 }
 @media (min-width:601px) {
     .info-grid    { grid-template-columns:repeat(3,1fr); gap:0; }
-    .info-item    { border-bottom:none; border-right:1px solid rgba(139,106,85,.08); padding:1.8rem 1.5rem 1.8rem 2rem; }
+    .info-item    { border-bottom:none; border-right:1px solid rgba(90,132,128,.08); padding:1.8rem 1.5rem 1.8rem 2rem; }
     .info-item:last-child { border-right:none; }
     .input-group  { flex-direction:row; align-items:flex-end; }
     .input-group input { flex:1; }
