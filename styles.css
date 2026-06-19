@@ -216,28 +216,6 @@ body.modo-nocturno { background-color:#fff5e4; filter:sepia(0.10) contrast(0.97)
     background: #f8f4ee;
 }
 
-/* Indicador de scroll lateral */
-.scroll-track {
-    position: absolute; right: 0; top: 0; bottom: 0;
-    width: 6px; background: rgba(90,132,128,.08);
-    z-index: 10; cursor: default;
-}
-.scroll-fill {
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 0%;
-    background: linear-gradient(to bottom, var(--tierra-3), var(--tierra-2));
-    transition: height .15s ease;
-    border-radius: 0 0 3px 3px;
-}
-.scroll-thumb-label {
-    position: absolute; right: 10px; top: 50%;
-    transform: translateY(-50%);
-    font-family: var(--font-mono); font-size: .55rem;
-    color: var(--tierra-3); letter-spacing: .05em;
-    white-space: nowrap; pointer-events: none;
-    writing-mode: vertical-rl;
-}
-
 /* Footer del lector */
 .lector-footer {
     padding: 1rem 2rem;
