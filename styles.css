@@ -133,6 +133,21 @@ body.modo-nocturno { background-color:#fff5e4; filter:sepia(0.10) contrast(0.97)
     margin-bottom: 1.8rem;
 }
 
+
+/* ---------- Solución para el fondo celeste de autocompletado ---------- */
+.login-modal-card input:-webkit-autofill,
+.login-modal-card input:-webkit-autofill:hover, 
+.login-modal-card input:-webkit-autofill:focus {
+    /* Reemplaza #f2ebd9 por el color exacto del fondo de tu input/tarjeta */
+    -webkit-box-shadow: 0 0 0px 1000px #f2ebd9 inset !important;
+    
+    /* Mantiene las letras en el color de tu paleta (var(--tierra-2) o un tono oscuro) */
+    -webkit-text-fill-color: var(--tierra-2) !important;
+    
+    /* Evita transiciones extrañas del navegador */
+    transition: background-color 5000s ease-in-out 0s;
+}
+
 /* ---------- Modal Lector PDF ---------- */
 .modal-lector-overlay {
     align-items: stretch;
