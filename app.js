@@ -161,9 +161,8 @@ function abrirModalLector(trivia) {
     const pdfRuta = trivia.pdf || "lecturas/" + trivia.codigo.toLowerCase() + ".pdf";
     iframe.src = pdfRuta;
 
-    // Reset estado lector
+    // Reset estado lector (Scroll eliminado por completo)
     lecturaListaTiempo = false;
-    scrollAlcanzado    = false;
     actualizarBotonEmpezar();
 
     // Mostrar modal
@@ -179,11 +178,12 @@ function abrirModalLector(trivia) {
         "Cuando termines, presiona Empezar Trivia."
     ];
     iniciarTyping(frases, () => {
-        // Al terminar el typing, iniciar el contador
+        // Al terminar el typing, iniciar el contador y la simulación visual de la barra
         iniciarContadorLectura();
+        iniciarProgresoSimulado(); 
     });
 
-    enlinHablar(`Codigo verificado. Lee con atención y presiona Empezar cuando termines.`);
+    enlinHablar(`Código verificado. Lee con atención y presiona Empezar cuando termines.`);
     enlinOjos("feliz");
 }
 
@@ -268,101 +268,68 @@ function marcarTiempoListo() {
 }
 
 // --------------------------------------------------------------------------
-// INDICADOR DE SCROLL (barra lateral + barra inferior)
+// PROGRESO DE LECTURA (Simulado automáticamente por tiempo)
 // --------------------------------------------------------------------------
 function iniciarScrollIndicador() {
-    // El PDF está en un iframe, no podemos detectar scroll interno directamente.
-    // Usamos el scroll del contenedor .pdf-container como proxy (el iframe llena el espacio).
-    // El truco: el usuario al leer el PDF hace scroll en el iframe, pero nosotros
-    // simulamos con un detector de tiempo + mensaje orientativo.
-    // Para el scroll real, usamos el contenedor del modal que sí tiene overflow:auto en mobile.
-
-    const container = document.getElementById("pdf-container");
-    if (!container) return;
-
-    // En desktop: el iframe ocupa todo, monitoreamos mensajes del iframe (si mismo origen)
-    // Como fallback elegante: usamos un intervalo que va subiendo el progreso gradualmente
-    // mientras el tiempo corre, dando feedback visual real.
-    // Si el usuario hace scroll en el modal-lector (mobile), lo detectamos.
-
-    const lectorModal = document.querySelector(".lector-modal-card");
-    if (lectorModal) {
-        lectorModal.addEventListener("scroll", actualizarScrollVisual);
-    }
-    // También detectar si el iframe envía mensajes de scroll (mismo origen)
-    window.addEventListener("message", (e) => {
-        if (e.data && typeof e.data.scrollPct === "number") {
-            setScrollProgress(e.data.scrollPct);
-        }
-    });
+    // Dejado vacío intencionalmente ya que no dependerá de scroll físico
 }
 
-function actualizarScrollVisual(e) {
-    const el = e.target;
-    const pct = Math.min(100, Math.round((el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100)) || 0;
-    setScrollProgress(pct);
-}
-
-// Progreso visual de scroll (barra lateral + barra inferior)
-let _scrollPctActual = 0;
 function setScrollProgress(pct) {
-    _scrollPctActual = pct;
-    const fill  = document.getElementById("scroll-fill");
     const fillH = document.getElementById("scroll-progress-fill");
     const label = document.getElementById("scroll-progress-label");
 
-    if (fill)  fill.style.height = `${pct}%`;
     if (fillH) fillH.style.width = `${pct}%`;
+    
     if (label) {
-        if (pct >= 95) {
-            label.textContent = "Documento completado";
-            scrollAlcanzado = true;
-            actualizarBotonEmpezar();
-        } else if (pct > 0) {
-            label.textContent = `Progreso de lectura: ${pct}%`;
+        if (pct >= 100) {
+            label.textContent = "Tiempo de lectura completado";
+        } else {
+            label.textContent = `Progreso de lectura obligatorio: ${pct}%`;
         }
     }
 }
 
-// Avance automático del scroll mientras el tiempo corre (simulación visual)
+// Avance automático de la barra inferior mientras el tiempo corre
 function iniciarProgresoSimulado() {
     const trivia   = triviaActual;
     const totalSeg = (trivia?.tiempoLectura || 8) * 60;
-    let   elapsed  = 0;
+    let elapsed  = 0;
 
     const inter = setInterval(() => {
         elapsed++;
+        
+        // Si el tiempo ya terminó, aseguramos el 100% y frenamos
         if (elapsed >= totalSeg || lecturaListaTiempo) {
             clearInterval(inter);
+            setScrollProgress(100);
             return;
         }
+        
         // Progreso suave basado en tiempo transcurrido
-        const pct = Math.min(98, Math.round((elapsed / totalSeg) * 100));
+        const pct = Math.min(99, Math.round((elapsed / totalSeg) * 100));
         setScrollProgress(pct);
-
-        if (elapsed >= totalSeg * 0.95) {
-            clearInterval(inter);
-            setScrollProgress(100);
-        }
     }, 1000);
 }
 
 // --------------------------------------------------------------------------
-// BOTÓN EMPEZAR — habilitado solo cuando tiempo Y scroll están listos
+// BOTÓN EMPEZAR — Depende únicamente del tiempo cumplido
 // --------------------------------------------------------------------------
 function actualizarBotonEmpezar() {
-    const btn     = document.getElementById("btn-empezar");
-    const label   = document.getElementById("scroll-progress-label");
+    const btn = document.getElementById("btn-empezar");
     if (!btn) return;
 
-    const listo = lecturaListaTiempo && (scrollAlcanzado || _scrollPctActual >= 95);
-
-    btn.disabled = !listo;
-
-    if (!lecturaListaTiempo) {
-        // Aún contando tiempo
-    } else if (!scrollAlcanzado && _scrollPctActual < 95) {
-        if (label) label.textContent = "Desplázate por todo el documento para continuar";
+    if (lecturaListaTiempo) {
+        // Desbloqueo total del botón
+        btn.removeAttribute("disabled");
+        btn.disabled = false;
+        
+        const btnText = document.getElementById("btn-empezar-texto");
+        if (btnText) {
+            btnText.innerHTML = `<svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:currentColor; vertical-align:middle; margin-right:8px;"><path d="M8 5v14l11-7z"/></svg> Empezar Trivia`;
+        }
+    } else {
+        // Bloqueado mientras la cuenta regresiva esté activa
+        btn.disabled = true;
     }
 }
 
@@ -632,19 +599,6 @@ function irA(idSeccion) {
     }
 }
 
-// --------------------------------------------------------------------------
-// MODO NOCTURNO
-// --------------------------------------------------------------------------
-function toggleModoNoche() {
-    document.body.classList.toggle("modo-nocturno");
-    const btn = document.getElementById("btn-noche");
-    const activo = document.body.classList.contains("modo-nocturno");
-    if (btn) {
-        btn.innerHTML = activo
-            ? `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:13px;height:13px;fill:currentColor"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg> Modo Día`
-            : `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:13px;height:13px;fill:currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Modo Lectura`;
-    }
-}
 
 // --------------------------------------------------------------------------
 // MENÚ HAMBURGUESA
