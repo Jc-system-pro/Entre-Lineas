@@ -12,10 +12,129 @@
 <body>
 
     <!-- ═══════════════════════════════════════════════
-         FONDO DECORATIVO — siluetas de libros abiertos
+         SPLASH — pantalla de carga inicial
+    ═══════════════════════════════════════════════ -->
+    <div id="splash-screen">
+        <div class="splash-inner">
+            <div class="splash-logo">Entre <em>Líneas</em></div>
+            <div class="splash-line"></div>
+            <p class="splash-sub">Cargando biblioteca...</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         MODAL LOGIN
+    ═══════════════════════════════════════════════ -->
+    <div id="modal-login" class="modal-overlay" role="dialog" aria-modal="true">
+        <div class="modal-card login-modal-card">
+            <div class="modal-brand">
+                <span class="modal-logo">Entre <em>Líneas</em></span>
+                <span class="modal-year">Año Escolar 2026</span>
+            </div>
+            <div class="modal-divider"></div>
+            <div class="card-header">
+                <svg viewBox="0 0 24 24" class="card-icon"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                <h2>Acceso de Estudiante</h2>
+            </div>
+            <p class="card-subtitle">Identifícate para comenzar tu sesión lectora.</p>
+            <div class="input-group">
+                <input type="text" id="login-user" placeholder="Nombre y Apellido completos"
+                       onkeydown="if(event.key==='Enter') loginStudent()">
+                <input type="password" id="login-pass" placeholder="Tu DNI (contraseña)"
+                       onkeydown="if(event.key==='Enter') loginStudent()">
+                <button class="btn-primary" onclick="loginStudent()">
+                    <svg viewBox="0 0 24 24"><path d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5-5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v14z"/></svg>
+                    Ingresar
+                </button>
+            </div>
+            <p id="login-error" class="error-msg"></p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         MODAL LECTOR DE PDF
+    ═══════════════════════════════════════════════ -->
+    <div id="modal-lector" class="modal-overlay modal-lector-overlay hidden">
+        <div class="modal-card lector-modal-card">
+
+            <!-- Header del lector -->
+            <div class="lector-header">
+                <div class="lector-header-left">
+                    <span class="section-label" id="lector-label">Lectura</span>
+                    <div class="lector-titulo-wrap">
+                        <h2 id="lector-titulo" class="lector-titulo"></h2>
+                        <span id="lector-autor" class="lector-autor"></span>
+                    </div>
+                </div>
+                <div class="lector-meta">
+                    <!-- Tiempo mínimo de lectura -->
+                    <div class="tiempo-lectura-badge" id="tiempo-badge">
+                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+                        <span id="tiempo-texto">Tiempo mínimo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing intro -->
+            <div id="lector-typing-wrap" class="lector-typing-wrap">
+                <p id="lector-typing" class="lector-typing-text"></p>
+            </div>
+
+            <!-- Contenedor del PDF -->
+            <div class="pdf-container" id="pdf-container">
+                <!-- Indicador de scroll -->
+                <div class="scroll-track" id="scroll-track">
+                    <div class="scroll-fill" id="scroll-fill"></div>
+                    <div class="scroll-thumb-label" id="scroll-label">0%</div>
+                </div>
+                <iframe id="pdf-iframe" class="pdf-iframe" src="" title="Lectura del libro"></iframe>
+            </div>
+
+            <!-- Footer del lector -->
+            <div class="lector-footer">
+                <div class="lector-progreso-wrap">
+                    <div class="scroll-progress-bar-bg">
+                        <div id="scroll-progress-fill" class="scroll-progress-fill"></div>
+                    </div>
+                    <span id="scroll-progress-label" class="scroll-progress-label">Desplázate por el documento</span>
+                </div>
+                <button class="btn-primary btn-empezar" id="btn-empezar" onclick="pedirConfirmacion()" disabled>
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <span id="btn-empezar-texto">Empezar en <strong id="countdown-display">--:--</strong></span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         MODAL CONFIRMACIÓN
+    ═══════════════════════════════════════════════ -->
+    <div id="modal-confirmar" class="modal-overlay modal-confirmar-overlay hidden">
+        <div class="modal-card confirmar-card">
+            <div class="confirmar-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </div>
+            <h2 class="confirmar-titulo">¿Listo para comenzar?</h2>
+            <p class="confirmar-sub">Una vez que inicies la trivia, <strong>no podrás volver al texto</strong>. Cada pregunta tiene un tiempo límite de 20 segundos.</p>
+            <p class="confirmar-aviso">Este código quedará marcado como usado. Solo tienes una oportunidad.</p>
+            <div class="confirmar-acciones">
+                <button class="btn-ghost" onclick="volverALeer()">
+                    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    Seguir leyendo
+                </button>
+                <button class="btn-primary" onclick="confirmarInicioTrivia()">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    Sí, comenzar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         FONDO DECORATIVO
     ═══════════════════════════════════════════════ -->
     <div class="bg-deco" aria-hidden="true">
-        <!-- Libro abierto 1 -->
         <svg class="bg-book b1" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
             <path d="M60 10 C60 10 30 8 10 15 L10 70 C30 63 60 65 60 65 C60 65 90 63 110 70 L110 15 C90 8 60 10 60 10Z"/>
             <path d="M60 10 L60 65" stroke-width="2" stroke="currentColor" fill="none"/>
@@ -26,7 +145,6 @@
             <path d="M62 30 Q80 28 100 30" stroke-width="1" stroke="currentColor" fill="none"/>
             <path d="M62 38 Q80 36 100 38" stroke-width="1" stroke="currentColor" fill="none"/>
         </svg>
-        <!-- Libro abierto 2 -->
         <svg class="bg-book b2" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
             <path d="M60 10 C60 10 30 8 10 15 L10 70 C30 63 60 65 60 65 C60 65 90 63 110 70 L110 15 C90 8 60 10 60 10Z"/>
             <path d="M60 10 L60 65" stroke-width="2" stroke="currentColor" fill="none"/>
@@ -38,7 +156,6 @@
             <path d="M62 34 Q80 32 100 34" stroke-width="1" stroke="currentColor" fill="none"/>
             <path d="M62 43 Q80 41 100 43" stroke-width="1" stroke="currentColor" fill="none"/>
         </svg>
-        <!-- Libro abierto 3 -->
         <svg class="bg-book b3" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
             <path d="M60 10 C60 10 30 8 10 15 L10 70 C30 63 60 65 60 65 C60 65 90 63 110 70 L110 15 C90 8 60 10 60 10Z"/>
             <path d="M60 10 L60 65" stroke-width="2" stroke="currentColor" fill="none"/>
@@ -47,12 +164,10 @@
             <path d="M62 28 Q82 26 102 28" stroke-width="1.5" stroke="currentColor" fill="none"/>
             <path d="M62 37 Q82 35 102 37" stroke-width="1" stroke="currentColor" fill="none"/>
         </svg>
-        <!-- Libro abierto 4 -->
         <svg class="bg-book b4" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
             <path d="M60 10 C60 10 30 8 10 15 L10 70 C30 63 60 65 60 65 C60 65 90 63 110 70 L110 15 C90 8 60 10 60 10Z"/>
             <path d="M60 10 L60 65" stroke-width="2" stroke="currentColor" fill="none"/>
         </svg>
-        <!-- Libro abierto 5 -->
         <svg class="bg-book b5" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
             <path d="M60 10 C60 10 30 8 10 15 L10 70 C30 63 60 65 60 65 C60 65 90 63 110 70 L110 15 C90 8 60 10 60 10Z"/>
             <path d="M60 10 L60 65" stroke-width="2" stroke="currentColor" fill="none"/>
@@ -64,15 +179,11 @@
     <!-- ═══════════════════════════════════════════════
          NAVBAR
     ═══════════════════════════════════════════════ -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <span class="nav-logo">Entre Líneas</span>
+            <span class="nav-logo">Entre <em>Líneas</em></span>
             <div class="nav-actions">
-                <button id="btn-noche" class="btn-icon" onclick="toggleModoNoche()" title="Modo Lectura Nocturna">
-                    <!-- Silueta luna -->
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                    Modo Lectura
-                </button>
+                
                 <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menú">
                     <span></span><span></span><span></span>
                 </button>
@@ -82,74 +193,79 @@
                 <li><a href="#ranking"     onclick="toggleMenu()">Ranking</a></li>
                 <li><a href="#proyecto"    onclick="toggleMenu()">Proyecto</a></li>
                 <li><a href="#importancia" onclick="toggleMenu()">Importancia</a></li>
-                <li>
-                 <a href="LECTURAS.pdf" download>
-                     Descargar
-                 </a>
-                </li>
             </ul>
         </div>
     </nav>
 
     <!-- ═══════════════════════════════════════════════
-         HERO
+         HERO — pantalla completa
     ═══════════════════════════════════════════════ -->
     <header class="hero" id="inicio">
         <div class="hero-content">
             <span class="hero-tag">Año Escolar 2026</span>
             <h1>Entre <em>Líneas</em></h1>
             <p class="hero-sub">Tus desafíos de lectura y tu progreso en un solo lugar.</p>
+            <div class="hero-stats" id="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-num" id="stat-alumnos">—</span>
+                    <span class="hero-stat-label">Lectores activos</span>
+                </div>
+                <div class="hero-stat-sep"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-num" id="stat-libros">2</span>
+                    <span class="hero-stat-label">Libros disponibles</span>
+                </div>
+                <div class="hero-stat-sep"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-num" id="stat-puntos">—</span>
+                    <span class="hero-stat-label">Puntos en juego</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll-hint">
+            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
         </div>
     </header>
 
     <main class="main-container">
 
         <!-- ─────────────────────────────────────────
-             SECCIÓN 1: LOGIN
+             SECCIÓN 1: LOGIN (oculto, ahora es modal)
         ───────────────────────────────────────── -->
-        <section class="card" id="login-box">
-            <span class="section-label">Acceso</span>
-            <div class="card-header">
-                <!-- Silueta persona/usuario -->
-                <svg viewBox="0 0 24 24" class="card-icon"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-                <h2>Acceso de Estudiante</h2>
-            </div>
-            <p class="card-subtitle">Identifícate para comenzar tu sesión lectora.</p>
-            <div class="input-group">
-                <input type="text"     id="login-user" placeholder="Nombre y Apellido completos"
-                       onkeydown="if(event.key==='Enter') loginStudent()">
-                <input type="password" id="login-pass" placeholder="Tu DNI (contraseña)"
-                       onkeydown="if(event.key==='Enter') loginStudent()">
-                <button class="btn-primary" onclick="loginStudent()">Ingresar</button>
-            </div>
-            <p id="login-error" class="error-msg"></p>
+        <section class="card hidden" id="login-box">
+            <!-- vacío: el login vive en el modal -->
         </section>
 
         <!-- ─────────────────────────────────────────
              SECCIÓN 2: CÓDIGO DEL LIBRO
         ───────────────────────────────────────── -->
-        <section class="card hidden" id="unlock-box">
+        <section class="card seccion-activa hidden" id="unlock-box">
             <span class="section-label">Biblioteca</span>
             <div class="card-header">
-                <!-- Silueta llave/libro -->
                 <svg viewBox="0 0 24 24" class="card-icon"><path d="M18 1l-1.4 1.4 1 1L14.2 6.8A3.9 3.9 0 0 0 12 6a4 4 0 1 0 4 4 3.9 3.9 0 0 0-.8-2.2l3.4-3.4 1 1L21 4Zm-6 11a2 2 0 1 1 2-2 2 2 0 0 1-2 2ZM4 20v-1a7 7 0 0 1 7-7h.3A8.9 8.9 0 0 0 10 14a9 9 0 0 0-9 9v1Z"/></svg>
                 <h2>Hola, <span id="logged-student-name"></span></h2>
             </div>
-            <p class="card-subtitle">Ingresa el código oculto en el libro físico de la biblioteca para abrir la trivia.</p>
+            <p class="card-subtitle">Ingresa el código que encontraste en tu lectura para desbloquear la trivia.</p>
             <div class="input-group">
                 <input type="text" id="book-code" placeholder="Código de activación (ej: PRINCIPITO1)"
                        style="text-transform:uppercase"
                        onkeydown="if(event.key==='Enter') unlockBook()">
-                <button class="btn-primary" onclick="unlockBook()">Desbloquear</button>
+                <button class="btn-primary" onclick="unlockBook()">
+                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                    Desbloquear
+                </button>
             </div>
             <p id="unlock-error" class="error-msg"></p>
-            <button class="btn-ghost" onclick="cerrarSesion()" style="margin-top:1.5rem;">← Cerrar sesión</button>
+            <button class="btn-ghost" onclick="cerrarSesion()" style="margin-top:1.5rem;">
+                <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor;flex-shrink:0"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                Cerrar sesión
+            </button>
         </section>
 
         <!-- ─────────────────────────────────────────
              SECCIÓN 3: QUIZ
         ───────────────────────────────────────── -->
-        <section class="card hidden" id="quiz-box">
+        <section class="card seccion-activa hidden" id="quiz-box">
             <div class="quiz-header">
                 <div>
                     <p id="quiz-titulo" class="quiz-titulo"></p>
@@ -159,12 +275,10 @@
                     <span id="quiz-timer">20</span><small>s</small>
                 </div>
             </div>
-
             <p id="quiz-numero" class="quiz-numero"></p>
             <div class="progress-bar-bg">
                 <div id="progress" class="progress-bar-fill"></div>
             </div>
-
             <h3 id="quiz-question" class="quiz-question">Cargando...</h3>
             <div id="quiz-options" class="quiz-options"></div>
         </section>
@@ -172,9 +286,8 @@
         <!-- ─────────────────────────────────────────
              SECCIÓN 4: RESULTADO
         ───────────────────────────────────────── -->
-        <section class="card hidden" id="result-box">
+        <section class="card seccion-activa hidden" id="result-box">
             <div class="result-center">
-                <!-- Medalla como SVG (el JS la reemplaza por emoji, aquí el contenedor) -->
                 <div class="result-medalla" id="result-medalla"></div>
                 <h2 class="result-titulo">Trivia completada</h2>
                 <p id="result-libro" class="result-libro"></p>
@@ -200,13 +313,11 @@
         <section class="card" id="ranking">
             <span class="section-label">Clasificación</span>
             <div class="card-header">
-                <!-- Silueta trofeo -->
                 <svg viewBox="0 0 24 24" class="card-icon"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A6.01 6.01 0 0 0 11 14.93V19H7v2h10v-2h-4v-4.07a6.01 6.01 0 0 0 3.61-2.99C19.08 11.63 21 9.55 21 7V6c0-1.1-.9-2-2-2zm-12 5c-1.1 0-2-.9-2-2V7h2v3zm10-2c0 1.1-.9 2-2 2V7h2v1z"/></svg>
                 <h2>Líderes de Lectura</h2>
             </div>
             <p class="card-subtitle">Los cinco lectores más constantes del salón.</p>
             <ol id="leaderboard" class="leaderboard-list"></ol>
-
             <div class="search-panel">
                 <h3>Buscar mi posición</h3>
                 <div class="input-group">
@@ -217,20 +328,16 @@
             </div>
         </section>
 
-        <!-- ─────────────────────────────────────────
-             SOBRE EL PROYECTO
-        ───────────────────────────────────────── -->
+        <!-- SOBRE EL PROYECTO -->
         <section class="card info-card" id="proyecto">
             <span class="section-label">El proyecto</span>
             <div class="card-header">
-                <!-- Silueta personas -->
                 <svg viewBox="0 0 24 24" class="card-icon"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
                 <h2>Sobre el Proyecto</h2>
             </div>
             <p class="card-subtitle">Objetivos y finalidades de la plataforma escolar.</p>
             <div class="info-grid">
                 <div class="info-item" data-num="01">
-                    <!-- Silueta persona leyendo -->
                     <svg class="info-item-icon" viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/></svg>
                     <div class="info-item-body">
                         <h3>Autonomía Lectora</h3>
@@ -238,7 +345,6 @@
                     </div>
                 </div>
                 <div class="info-item" data-num="02">
-                    <!-- Silueta biblioteca -->
                     <svg class="info-item-icon" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
                     <div class="info-item-body">
                         <h3>Inclusión en Biblioteca</h3>
@@ -246,7 +352,6 @@
                     </div>
                 </div>
                 <div class="info-item" data-num="03">
-                    <!-- Silueta estrella/ranking -->
                     <svg class="info-item-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                     <div class="info-item-body">
                         <h3>Competencia Sana</h3>
@@ -256,20 +361,16 @@
             </div>
         </section>
 
-        <!-- ─────────────────────────────────────────
-             IMPORTANCIA DE LA LECTURA
-        ───────────────────────────────────────── -->
+        <!-- IMPORTANCIA DE LA LECTURA -->
         <section class="card info-card clear" id="importancia">
             <span class="section-label">Por qué leer</span>
             <div class="card-header">
-                <!-- Silueta info/cerebro -->
                 <svg viewBox="0 0 24 24" class="card-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
                 <h2>Importancia de la Lectura</h2>
             </div>
             <p class="card-subtitle">Beneficios de entrenar tu mente a través de los libros.</p>
             <div class="info-grid">
                 <div class="info-item" data-num="01">
-                    <!-- Silueta cerebro/mente -->
                     <svg class="info-item-icon" viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
                     <div class="info-item-body">
                         <h3>Desarrollo Cognitivo</h3>
@@ -277,7 +378,6 @@
                     </div>
                 </div>
                 <div class="info-item" data-num="02">
-                    <!-- Silueta corazón/bienestar -->
                     <svg class="info-item-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                     <div class="info-item-body">
                         <h3>Reducción del Estrés</h3>
@@ -285,7 +385,6 @@
                     </div>
                 </div>
                 <div class="info-item" data-num="03">
-                    <!-- Silueta texto/lenguaje -->
                     <svg class="info-item-icon" viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
                     <div class="info-item-body">
                         <h3>Riqueza Lingüística</h3>
@@ -298,7 +397,7 @@
     </main>
 
     <!-- ═══════════════════════════════════════════════
-         ENLIN — mascota flotante rediseñada
+         ENLIN — mascota flotante
     ═══════════════════════════════════════════════ -->
     <div id="enlin-widget" aria-label="Mascota ENLIN">
         <div id="enlin-bubble" class="hidden" role="status"></div>
@@ -335,7 +434,6 @@
             <div>
                 <h4>Soporte Técnico</h4>
                 <p class="footer-contact">
-                    <!-- Silueta teléfono -->
                     <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
                     +51 978 159 209 (WhatsApp)
                 </p>
@@ -347,9 +445,7 @@
         </div>
     </footer>
 
-    <!-- ═══════════════════════════════════════════════
-         SCRIPTS — ORDEN IMPORTANTE
-    ═══════════════════════════════════════════════ -->
+    <!-- SCRIPTS -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
     <script src="firebase-config.js"></script>
@@ -357,16 +453,14 @@
     <script src="trivias/trivia_laflormb.js"></script>
     <script src="app.js"></script>
 
-    <!-- Parche visual: ranking con SVG en vez de emojis, y medalla SVG en resultado -->
+    <!-- Parche visual: ranking con SVG en vez de emojis -->
     <script>
-    // Override renderRanking para usar siluetas SVG en vez de emojis
     const _origRenderRanking = window.renderRanking;
     window.renderRanking = function() {
         const lista = document.getElementById("leaderboard");
         if (!lista || typeof alumnosDB === 'undefined') return;
         const ordenados = [...alumnosDB].sort((a, b) => b.puntos - a.puntos);
         const top5 = ordenados.slice(0, 5);
-        // SVG copa/medalla para top 3
         const svgMedalla = (i) => {
             const colors = ['#C9A84C','#A0A0A0','#B07B5A'];
             if (i < 3) return `<svg class="rank-svg" viewBox="0 0 24 24" style="width:18px;height:18px;fill:${colors[i]}"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A6.01 6.01 0 0 0 11 14.93V17H9v2h6v-2h-2v-2.07a6.01 6.01 0 0 0 3.61-2.99C19.08 11.63 21 9.55 21 7V6c0-1.1-.9-2-2-2zm-12 4c-1.1 0-2-.9-2-2V7h2v2zm10 0V7h2v1c0 1.1-.9 2-2 2z"/></svg>`;
@@ -378,13 +472,17 @@
             li.innerHTML = `<span class="rank-pos">${svgMedalla(i)}</span><span class="rank-nombre">${al.nombre}</span><span class="rank-pts">${al.puntos} pts</span>`;
             lista.appendChild(li);
         });
+
+        // Actualizar stats del hero
+        const statAlumnos = document.getElementById('stat-alumnos');
+        const statPuntos  = document.getElementById('stat-puntos');
+        if (statAlumnos) statAlumnos.textContent = alumnosDB.length;
+        if (statPuntos)  statPuntos.textContent  = alumnosDB.reduce((s,a) => s + a.puntos, 0);
     };
 
-    // Override mostrarResultados para usar SVG en medalla
     const _origMostrarResultados = window.mostrarResultados;
     window.mostrarResultados = async function() {
         await _origMostrarResultados();
-        // Reemplazar emoji de medalla por SVG
         const medallaEl = document.getElementById('result-medalla');
         if (!medallaEl) return;
         const emoji = medallaEl.textContent.trim();

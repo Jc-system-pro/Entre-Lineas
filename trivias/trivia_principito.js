@@ -1,12 +1,14 @@
 // ==========================================================================
-// 📚 TRIVIA: EL PRINCIPITO
+// TRIVIA: EL PRINCIPITO
 // Código de activación: PRINCIPITO1
 // ==========================================================================
 window.TRIVIA_PRINCIPITO1 = {
-    codigo: "PRINCIPITO1",
-    titulo: "El Principito",
-    autor: "Antoine de Saint-Exupéry",
-    portada: "🌹",
+    codigo:        "PRINCIPITO1",
+    titulo:        "El Principito",
+    autor:         "Antoine de Saint-Exupéry",
+    portada:       "",
+    pdf:           "lecturas/principito.pdf",
+    tiempoLectura: 8,
     preguntas: [
         {
             q: "¿En qué asteroide vivía el Principito?",

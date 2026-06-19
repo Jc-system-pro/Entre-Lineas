@@ -1,14 +1,14 @@
 // ============================================================
 //  TRIVIA — La Flor Más Bonita
 //  Código: LAFLORMB
-//  Autor: Anónimo (cuento de origen chino)
 // ============================================================
-
 window.TRIVIA_LAFLORMB = {
-    codigo:   "LAFLORMB",
-    titulo:   "La Flor Más Bonita",
-    autor:    "Anónimo",
-    portada:  "🌸",
+    codigo:        "LAFLORMB",
+    titulo:        "La Flor Más Bonita",
+    autor:         "Anónimo",
+    portada:       "",
+    pdf:           "lecturas/laflormb.pdf",
+    tiempoLectura: 10,
 
     preguntas: [
         {
@@ -64,7 +64,6 @@ window.TRIVIA_LAFLORMB = {
     ]
 };
 
-// Registro automático
 if (typeof registrarTrivia === "function") {
     registrarTrivia(window.TRIVIA_LAFLORMB);
 }

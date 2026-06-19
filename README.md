@@ -107,7 +107,7 @@ if (window.TRIVIA_HOBBIT1) registrarTrivia(window.TRIVIA_HOBBIT1);
 |-----------------|----------|
 | Mateo Silva     | 71234567 |
 | Valeria Castillo| 72345678 |
-| Jc Desarrollador| 73456789 |
+| JOSE SARAVIA    | 75554974 |
 | Sofía Mendoza   | 74567890 |
 | Lucas Paz       | 75678901 |
 
